@@ -33,14 +33,10 @@ class Room:
         self.Go = Go_Text #String
 
 def Parse(In):
+    In = In.lower() #Lowercase the input
     In = In.split() #Split the input up
     r = -1 #Set "r" to a placeholder value
     
-    i = 0
-    while i < len(In): #Make all items in the list "In" lowercase 
-        In[i] = In[i].lower()
-        i = i + 1
-
     i = 0
     while i < len(In): #See where the first function word is in the list "In"
         if In[i] in ["look", "use", "take", "go"]:
