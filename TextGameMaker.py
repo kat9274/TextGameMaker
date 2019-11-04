@@ -174,7 +174,3 @@ def Go(Way):
     except:
         pass
     return 1 #Error
-
-
-# YOUR CODE HERE:
-
