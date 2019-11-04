@@ -1,8 +1,6 @@
 #TODO:
     #use the rooms and players object lists
     #make a put down function
-    #parse the put down function
-    #create some functions that make batch defining easy for a user
     #write documentation
     #clean up code
     #???
@@ -176,3 +174,7 @@ def Go(Way):
     except:
         pass
     return 1 #Error
+
+
+# YOUR CODE HERE:
+
