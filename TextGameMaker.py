@@ -1,12 +1,12 @@
 #TODO:
     #use the rooms and players object lists
     #make a put down function
-    #write another script to make files that can be read by this file to load a game in
-    #make this script have the functionality to load in those files
     #write documentation
     #clean up code
     #???
     #profit
+    
+from Config import *
 
 class Object:
     def __init__(self, Usable, Takeable, Look_Text, Name, Pos, Use_The_Following, Use_Text, Take_Text):
