@@ -1,6 +1,8 @@
 #TODO:
     #use the rooms and players object lists
     #make a put down function
+    #write another script to make files that can be read by this file to load a game in
+    #make this script have the functionality to load in those files
     #write documentation
     #clean up code
     #???
