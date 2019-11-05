@@ -1,7 +1,7 @@
 # TextGameMaker
 Make text games with a python module
 
-# Documentation:
+# Documentation:\n
 Making objects:
   There are 7 values in an object, and they are; Usable, Takeable, Position, Name, Look_Text, Use_Text, and Take_Text.
   What the values do:
