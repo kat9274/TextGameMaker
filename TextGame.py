@@ -7,8 +7,7 @@
 from Config import *
 
 def Parse(In):
-    In = In.lower() #Lowercase the input
-    In = In.split() #Split the input up
+    In = In.lower().split() #Lowercase and split the input
     r = -1 #Set "r" to a placeholder value
     
     i = 0
