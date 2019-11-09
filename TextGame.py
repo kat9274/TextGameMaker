@@ -4,8 +4,8 @@ def Parse(Input):
     Input = Input.lower().split()
 
     i = 0
-    Start = "No Value"
-    while i < len(Input): #See where the first function word is in the list "In"
+    Start = "No Value" #Set Start to "No Value" so that if there is no start word it will know
+    while i < len(Input): #See where the first function word is in the list "Input"
         if Input[i] in Commands:
             Start = i
             break
@@ -13,29 +13,32 @@ def Parse(Input):
             i = i + 1
 
     try:
-        if Start == "No Value":
+        if Start == "No Value": #If there's no command
             print("What do you want to do?")
             pass
-        elif Input[Start] not in ["go"]:
-            if Input[(Start + 1)] in Not:
-                if Input[(Start + 2)] in Not:
-                    Offset = 3
+        elif Input[Start] not in ["go"]: #If the command is not "go"
+            try:#Find the offset. #Needs the try so when IndexError is raised it will look at the room
+                if Input[(Start + 1)] in Not: #If "String" is important
+                    if Input[(Start + 2)] in Not:
+                        Offset = 3
+                    else:
+                        Offset = 2
                 else:
-                    Offset = 2
-            else:
-                Offset = 1
-            Command_Table[Input[Start]](Object_Table[Input[(Start + Offset)]])
+                    Offset = 1
+                Command_Table[Input[Start]](Object_Table[Input[(Start + Offset)]]) #Run the command
+            except IndexError:
+                Command_Table[Input[Start]](FindRoom(Player.Pos))
         elif Input[Start] in ["go"]:
-            if Input[(Start + 1)] in Not:
+            if Input[(Start + 1)] in Not: #If "String" is important
                 if Input[(Start + 2)] in Not:
                     Offset = 3
                 else:
                     Offset = 2
             else:
                 Offset = 1
-            Command_Table[Input[Start]](Input[(Start + Offset)])
+            Command_Table[Input[Start]](Input[(Start + Offset)]) #Run the command
         pass
-    except Exception as e:
+    except Exception as e: #Errors
         e = e.__class__.__name__
         if e == "IndexError":
             print("What do you want to do?")
@@ -43,72 +46,58 @@ def Parse(Input):
             print("That doesn't exist. You might have typed it wrong.")
         pass
 
-def FindRoom():
-    return 0
+def FindRoom(Pos):
+    i = 0
+    while i < len(RoomList):
+        if RoomList[i].Pos == Pos: #Where room pos == "Pos"
+            return RoomList[i]
+        else:
+            i = i + 1
+            pass
 
 def Look(Object):
     try:
-        if Object in FindRoom().Items:
-            print(Object.Look)
-            return 0
-        else:
-            print(f"{Object.Name} isn't here!")
-            return 0
-        pass
+        print(Object.Look if Object in FindRoom(Player.Pos).Items else f"{Object.Name} isn't here!") #Print the look text or say the object isnt here
+        return 0
     except:
-        pass
-    return 1
+        return 1
 
 def Use(Object):
     try:
-        if Object in FindRoom().Items:
-            print(Object.Use)
-            return 0
+        if Object in FindRoom(Player.Pos).Items:
+            print(Object.Use[int(Object.On)])
+            Object.On = not Object.On
+            if Object.On_Use != False:
+                Object.On_Use(Object.Args)
         else:
             print(f"{Object.Name} isn't here!")
-            return 0
-        pass
+        return 0
     except:
-        pass
-    return 1
+        return 1
 
 def Take(Object):
     try:
-        if Object in FindRoom().Items:
+        if Object in FindRoom(Player.Pos).Items:
             if type(Object.Take).__name__ == "str":
                 print(Object.Take)
                 Player.Items.append(Object)
-                FindRoom().Items.pop(FindRooms.Items.index(Object))
-                return 0
+                FindRoom(Player.Pos).Items.pop(FindRooms.Items.index(Object))
             else:
                 print(f"{Object.Name} doesn't move!")
-                return 0
-            pass
         else:
             print(f"{Object.Name} isn't here!")
-            return 0
-        pass
+        return 0
     except:
-        pass
-    return 1
+        return 1
 
 def Leave(Object):
     try:
-        if Object in FindRoom().Items:
-            if type(Object.Take).__name__ == "str":
-                print(Object.Leave)
-                FindRoom().Items.append(Object)
-                Player.Items.Pop(Player.Items.index(Object))
-                return 0
-            else:
-                print(f"{Object.Name} doesn't move... wait a second...")
-                return 0
-        else:
-            print(f"{Object.Name} isn't here!")
-            return 0
+        print(Object.Leave)
+        FindRoom(Player.Pos).Items.append(Object)
+        Player.Items.Pop(Player.Items.index(Object))
+        return 0
     except:
-        pass
-    return 1
+        return 1
 
 def WhereIs(Object):
     try:
@@ -118,36 +107,22 @@ def WhereIs(Object):
         else:
             print(f"{RoomList.Items.index(Object).Pos[0]}, {RoomList.Items.index(Object).Pos[1]}")
             return RoomList.Items.index(Object).Pos
-        pass
     except:
-        pass
-    return 1
+        return 1
 
 def Go(Direction):
     OldPos = Player.Pos
     try:
-        Direction_Table = {"west": -1, "east": 1, "south": -1, "north": 1}
-        if Direction in ["west", "east"]:
-            Player.Pos[0] = Player.Pos[0] + Direction_Table[Direction]
-            if type(FindRoom()).__class__.__name__ == "Room":
-                print(FindRoom().Go)
-                return 0
-            else:
-                pass
-        elif Direction in ["south", "north"]:
-            Player.Pos[1] = Player.Pos[1] + Direction_Table[Direction]
-            if type(FindRoom()).__class__.__name__ == "Room":
-                print(FindRoom().Go)
-                return 0
-            else:
-                pass
-        print("You can't go there!")
-        Player.Pos = OldPos
-        print(FindRoom().Go)
+        Direction_Table = {"west": [0, -1], "east": [0, 1], "south": [1, -1], "north": [1, 1]}
+        Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] + Direction_Table[Direction][1]
+        if str(type(FindRoom(Player.Pos)).__name__) == "Room":
+            print(FindRoom(Player.Pos).Go)
+        else:
+            print("You cant go there!")
+            Player.Pos = OldPos
         return 0
     except:
-        pass
-    return 1
+        return 1
 
 Commands = ["go", "look", "use", "take", "leave", "where"]
 Not = ["at", "to", "am", "that", "the"]
