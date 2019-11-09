@@ -64,9 +64,9 @@ def Look(Object):
 
 def Use(Object):
     try:
-        if Object in FindRoom(Player.Pos).Items:
-            print(Object.Use[int(Object.On)])
-            Object.On = not Object.On
+        if Object in FindRoom(Player.Pos).Items: #If the object is in the rooms items list
+            print(Object.Use[int(Object.On)]) #Print the Use text most appropriate
+            Object.On = not Object.On #Toggle on
             if Object.On_Use != False:
                 Object.On_Use(Object.Args)
         else:
@@ -78,7 +78,7 @@ def Use(Object):
 def Take(Object):
     try:
         if Object in FindRoom(Player.Pos).Items:
-            if type(Object.Take).__name__ == "str":
+            if type(Object.Take).__name__ == "str": #If the object is takeable
                 print(Object.Take)
                 Player.Items.append(Object)
                 FindRoom(Player.Pos).Items.pop(FindRooms.Items.index(Object))
@@ -92,7 +92,7 @@ def Take(Object):
 
 def Leave(Object):
     try:
-        print(Object.Leave)
+        print(Object.Leave) #Just do the opposite of take
         FindRoom(Player.Pos).Items.append(Object)
         Player.Items.Pop(Player.Items.index(Object))
         return 0
@@ -101,8 +101,8 @@ def Leave(Object):
 
 def WhereIs(Object):
     try:
-        if type(Object).__name__ == "Player":
-            print(f"{Object.Pos[0]}, {Object.Pos[1]}")
+        if type(Object).__name__ == "Player": #If player
+            print(f"{Object.Pos[0]}, {Object.Pos[1]}") #Find player
             return Object.Pos
         else:
             print(f"{RoomList.Items.index(Object).Pos[0]}, {RoomList.Items.index(Object).Pos[1]}")
@@ -113,12 +113,12 @@ def WhereIs(Object):
 def Go(Direction):
     OldPos = Player.Pos
     try:
-        Direction_Table = {"west": [0, -1], "east": [0, 1], "south": [1, -1], "north": [1, 1]}
+        Direction_Table = {"west": [0, -1], "east": [0, 1], "south": [1, -1], "north": [1, 1]} #Table
         Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] + Direction_Table[Direction][1]
         if str(type(FindRoom(Player.Pos)).__name__) == "Room":
-            print(FindRoom(Player.Pos).Go)
+            print(FindRoom(Player.Pos).Go) #If the room exists print
         else:
-            print("You cant go there!")
+            print("You cant go there!") #If it doesnt exist print and reset the pos
             Player.Pos = OldPos
         return 0
     except:
