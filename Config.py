@@ -1,22 +1,25 @@
 class Object:
-    def __init__(self, Usable, Takeable, Pos, Name, Look_Text, Use_Text, Take_Text):
-        self.Usable = Usable #Bool
-        self.Takeable = Takeable #Bool
-        self.Pos = Pos #List
+    def __init__(self, Name, Look, Use, Take, Leave):
+        #got rid of pos in favor of items lists
         self.Name = Name #String
-        self.Look = Look_Text #String
-        self.Use = Use_Text #String
-        self.Take = Take_Text #String
+        self.Look = Look #String
+        self.Use = Use #String
+        self.Take = Take #String
+        self.Leave = Leave #String
+        self.On_Use = On_Use #Function
 
 class Player:
     def __init__(self):
-        self.Pos = [2, 2] #List
+        self.Pos = [0, 0] #List
+        self.Items = [] #List
 Player = Player() #Define "Player"
 
 class Room:
-   def __init__(self, Pos, Look_Text, Go_Text):
+   def __init__(self, Pos, Look, Go):
         self.Pos = Pos #List
-        self.Look = Look_Text #String
-        self.Go = Go_Text #String
-        
+        self.Items = [] #List
+        self.Look = Look #String
+        self.Go = Go #String
 
+Object_Table = {'i': Player, "me": Player}
+In_Prompt = ">>> "
