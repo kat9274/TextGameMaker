@@ -32,7 +32,6 @@ def Fan_Blows_Room00():
     Room10 = Room([1, 0], "")
     Room00.Look = "A pretty plain room. There is a fan here. The wall to the east has a door."
     RoomList.append(Room10)
-    print(Room00.Look)
 
 #Objects:
 Fan = Object("Fan", "It's a old fan.", ["The fan turns on. The wind from the fan blows a door to the west open.", "The fan turns off."], False, False, Fan_Blows_Room00, (False, ), False)

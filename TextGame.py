@@ -13,6 +13,9 @@ def Parse(Input):
             i = i + 1
 
     try:
+        if Input[Start] == "stop":
+            exit()
+
         if Start == "No Value": #If there's no command
             print("What do you want to do?")
             pass
@@ -68,7 +71,10 @@ def Use(Object):
             print(Object.Use[int(Object.On)]) #Print the Use text most appropriate
             Object.On = not Object.On #Toggle on
             if Object.On_Use != False:
-                Object.On_Use(Object.Args)
+                if Object.Args != (False, ):
+                    Object.On_Use(Object.Args)
+                else:
+                    Object.On_Use()
         else:
             print(f"{Object.Name} isn't here!")
         return 0
@@ -112,7 +118,6 @@ def WhereIs(Object):
         return 1
 
 def Go(Direction):
-    OldPos = Player.Pos
     try:
         Direction_Table = {"west": [0, -1], "east": [0, 1], "south": [1, -1], "north": [1, 1]} #Table
         Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] + Direction_Table[Direction][1]
@@ -120,12 +125,12 @@ def Go(Direction):
             print(FindRoom(Player.Pos).Look) #If the room exists print
         else:
             print("You cant go there!") #If it doesnt exist print and reset the pos
-            Player.Pos = OldPos
+            Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] - Direction_Table[Direction][1]
         return 0
     except:
         return 1
 
-Commands = ["go", "look", "use", "take", "leave", "where"]
+Commands = ["go", "look", "use", "take", "leave", "where", "stop"]
 Not = ["at", "to", "am", "that", "the"]
 Command_Table = {"go": Go, "look": Look, "use": Use, "take": Take, "leave": Leave, "where": WhereIs}
 
