@@ -92,10 +92,11 @@ def Take(Object):
 
 def Leave(Object):
     try:
-        print(Object.Leave) #Just do the opposite of take
-        FindRoom(Player.Pos).Items.append(Object)
-        Player.Items.Pop(Player.Items.index(Object))
-        return 0
+        if Object in Player.Items:
+            print(Object.Leave) #Just do the opposite of take
+            FindRoom(Player.Pos).Items.append(Object)
+            Player.Items.Pop(Player.Items.index(Object))
+            return 0
     except:
         return 1
 
@@ -116,7 +117,7 @@ def Go(Direction):
         Direction_Table = {"west": [0, -1], "east": [0, 1], "south": [1, -1], "north": [1, 1]} #Table
         Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] + Direction_Table[Direction][1]
         if str(type(FindRoom(Player.Pos)).__name__) == "Room":
-            print(FindRoom(Player.Pos).Go) #If the room exists print
+            print(FindRoom(Player.Pos).Look) #If the room exists print
         else:
             print("You cant go there!") #If it doesnt exist print and reset the pos
             Player.Pos = OldPos
