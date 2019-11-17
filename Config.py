@@ -41,20 +41,11 @@ Player = Player()  # Define "Player"
 Object_Table = {"i": Player}
 
 # Rooms:
-<<<<<<< HEAD
 Room00 = Room([0, 0], "A pretty plain room. There is a fan here. The wall to the north seems strange.")
 
 # Funcs:
 
 
-=======
-Room00 = Room(
-    [0, 0], "A pretty plain room. There is a fan here. The wall to the north seems strange.")
-
-# Funcs:
-
-
->>>>>>> ce4fbda8d4f0d0e1b50845488da64edfa304d6ea
 def Fan_Blows_Room00():
     Fan.Use[0] = "The fan turns on"
     Room01 = Room([0, 1], "")
@@ -63,10 +54,5 @@ def Fan_Blows_Room00():
 
 
 # Objects:
-<<<<<<< HEAD
 Fan = Object("Fan", "It's a old fan.", ["The fan turns on. The wind from the fan blows a door to the north open.", "The fan turns off."], False, False, Fan_Blows_Room00, (False, False), False)
-=======
-Fan = Object("Fan", "It's a old fan.", ["The fan turns on. The wind from the fan blows a door to the north open.",
-                                        "The fan turns off."], False, False, Fan_Blows_Room00, (False, False), False)
->>>>>>> ce4fbda8d4f0d0e1b50845488da64edfa304d6ea
 Room00.Items.append(Fan)
