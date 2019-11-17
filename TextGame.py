@@ -1,6 +1,5 @@
 from Config import *
 
-
 def Parse(Input):
     Input = Input.lower().split()
 
@@ -46,7 +45,6 @@ def Parse(Input):
         elif e == "KeyError":
             print("That doesn't exist. You might have typed it wrong.")
 
-
 def FindRoom(Pos):
     i = 0
     while i < len(RoomList):
@@ -56,7 +54,6 @@ def FindRoom(Pos):
             i = i + 1
             pass
 
-
 def Look(Object):
     try:
         # Print the look text or say the object isnt here
@@ -64,7 +61,6 @@ def Look(Object):
         return 0
     except:
         return 1
-
 
 def Use(Object):
     try:
@@ -84,7 +80,6 @@ def Use(Object):
     except:
         return 1
 
-
 def Take(Object):
     try:
         if Object in FindRoom(Player.Pos).Items:
@@ -100,7 +95,6 @@ def Take(Object):
     except:
         return 1
 
-
 def Leave(Object):
     try:
         if Object in Player.Items:
@@ -110,7 +104,6 @@ def Leave(Object):
             return 0
     except:
         return 1
-
 
 def WhereIs(Object):
     try:
@@ -122,7 +115,6 @@ def WhereIs(Object):
             return RoomList.Items.index(Object).Pos
     except:
         return 1
-
 
 def Go(Direction):
     try:
@@ -137,7 +129,6 @@ def Go(Direction):
         return 0
     except:
         return 1
-
 
 Commands = ["go", "look", "use", "take", "leave", "where", "stop", "end", "exit", "done", "leave"]
 Command_Table = {"go": Go, "look": Look, "use": Use, "take": Take, "leave": Leave, "where": WhereIs}
