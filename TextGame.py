@@ -133,5 +133,12 @@ def Go(Direction):
 Commands = ["go", "look", "use", "take", "leave", "where", "stop", "end", "exit", "done", "leave"]
 Command_Table = {"go": Go, "look": Look, "use": Use, "take": Take, "leave": Leave, "where": WhereIs}
 
+i = 0
+while i < len(CustomCommand_List):
+    if len(CustomCommand_List) > 0:
+        Command_Table[CustomCommand_List[i][0]] = CustomCommand_List[i][1]
+        Commands.append(CustomCommand_List[i][0])
+    i = i + 1
+
 while True:
     Parse(input(In_Prompt))

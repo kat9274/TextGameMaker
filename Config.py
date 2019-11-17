@@ -36,6 +36,7 @@ RoomList = []  # Define "RoomList"
 In_Prompt = ">>> "
 Player = Player()  # Define "Player"
 Object_Table = {"i": Player}
+CustomCommand_List = []
 
 # Rooms:
 Room00 = Room([0, 0], "A pretty plain room. There is a fan here. The wall to the north seems strange.")
@@ -50,3 +51,8 @@ def Fan_Blows_Room00():
 # Objects:
 Fan = Object("Fan", "It's a old fan.", ["The fan turns on. The wind from the fan blows a door to the north open.", "The fan turns off."], False, False, Fan_Blows_Room00, (False, False), False)
 Room00.Items.append(Fan)
+
+# Custom Commands:
+def Break(Object):
+    return "Code here"
+CustomCommand_List.append(["break", Break])
