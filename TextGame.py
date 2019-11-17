@@ -13,32 +13,29 @@ def Parse(Input):
             i = i + 1
 
     try:
-        if Input[Start] == "stop":
-            exit()
-
         if Start == "No Value": #If there's no command
             print("What do you want to do?")
             pass
+
+        elif Input[Start] in ["stop", "end", "exit", "done", "leave"]:
+            exit()
+
         elif Input[Start] not in ["go"]: #If the command is not "go"
-            try:#Find the offset. #Needs the try so when IndexError is raised it will look at the room
-                if Input[(Start + 1)] in Not: #If "String" is important
-                    if Input[(Start + 2)] in Not:
-                        Offset = 3
-                    else:
-                        Offset = 2
-                else:
-                    Offset = 1
+            try:#Needs the try so when IndexError is raised it will look at the room
+                i = 0
+                while Input[(Start + i)] not in ObjectsName:
+                    i = i + 1
+                    pass
+                Offset = i
                 Command_Table[Input[Start]](Object_Table[Input[(Start + Offset)]]) #Run the command
             except IndexError:
                 Command_Table[Input[Start]](FindRoom(Player.Pos))
         elif Input[Start] in ["go"]:
-            if Input[(Start + 1)] in Not: #If "String" is important
-                if Input[(Start + 2)] in Not:
-                    Offset = 3
-                else:
-                    Offset = 2
-            else:
-                Offset = 1
+            i = 0
+            while Input[(Start + i)] not in ["north", "south", "east", "west"]:
+                i = i + 1
+                pass
+            Offset = i
             Command_Table[Input[Start]](Input[(Start + Offset)]) #Run the command
         pass
     except Exception as e: #Errors
@@ -47,7 +44,7 @@ def Parse(Input):
             print("What do you want to do?")
         elif e == "KeyError":
             print("That doesn't exist. You might have typed it wrong.")
-        pass
+
 
 def FindRoom(Pos):
     i = 0
@@ -130,8 +127,7 @@ def Go(Direction):
     except:
         return 1
 
-Commands = ["go", "look", "use", "take", "leave", "where", "stop"]
-Not = ["at", "to", "am", "that", "the"]
+Commands = ["go", "look", "use", "take", "leave", "where", "stop", "end", "exit", "done", "leave"]
 Command_Table = {"go": Go, "look": Look, "use": Use, "take": Take, "leave": Leave, "where": WhereIs}
 
 while True:
