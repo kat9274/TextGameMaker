@@ -7,15 +7,15 @@ def Parse(Input):
     Input = Input.lower().split() #Get the input and split it up
 
     i = 0
+    Start = "none"
     while i < len(Input):
         if Input[i] in Commands: #If the str in Input[i] is a command then set that to start
             Start = i
             break
         else:
             i = i + 1
-
     try:
-        if Start.__class__.__name__ == "nonetype": #If there is no command then print
+        if Start == "none": #If there is no command then print
             print("What do you want to do?")
             pass
 
@@ -29,7 +29,7 @@ def Parse(Input):
                     i = i + 1
                     pass
                 Offset = i
-                Command_Table[Input[Start]](Object_Table[Input[(Start + Offset)]]) #Run the command
+                Command_Table[Input[Start]](Object_Table[''.join([str(Input[(Start + Offset)]), str(Player.Pos[0]), str(Player.Pos[1])])]) #Run the command
             except IndexError: #If there is no object use the room as the object
                 Command_Table[Input[Start]](FindRoom(Player.Pos))
 
@@ -140,6 +140,8 @@ while i < len(CustomCommand_List): #Add CustomCommand_List to Command_Table
         Command_Table[CustomCommand_List[i][0]] = CustomCommand_List[i][1]
         Commands.append(CustomCommand_List[i][0])
     i = i + 1
+
+print(Start_Prompt if Start_Prompt != "none" else "")
 
 while True:
     Parse(input(In_Prompt))

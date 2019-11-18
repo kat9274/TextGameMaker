@@ -1,6 +1,5 @@
 class Object:
     def __init__(self, Name, Look, Take, Leave, Use, On, *args, **kwargs):
-        global ObjectsName, Object_Table
         self.Name = Name  #String
         self.Look = Look  #String
         self.Take = Take  #String
@@ -26,7 +25,6 @@ class Object:
 
 class Player:
     def __init__(self):
-        global ObjectsName
         self.Pos = [0, 0]  # List
         self.Items = []  # List
 
@@ -34,13 +32,13 @@ class Player:
 
 class Room:
     def __init__(self, Pos, Look):
-        global RoomList
         self.Pos = Pos  # List
         self.Items = [self]  # List
         self.Look = Look  # String
         RoomList.append(self)
 
 # Needed:
+Start_Prompt = f"none"
 ObjectsName = []
 RoomList = []  # Define "RoomList"
 In_Prompt = ">>> "
@@ -85,3 +83,6 @@ def Read(Object):
     if Object.Type.lower() == "note":
         print(f"You read the note. It says:\n {Object.Text}")
 CustomCommand_List.append(["read", Read])
+
+#Start Prompt:
+Start_Prompt = f"A short adventrue game by Kat9274, using TextGameMaker by Kat9274. \n{Room00.Look}"
