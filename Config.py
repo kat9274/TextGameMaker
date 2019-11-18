@@ -54,9 +54,12 @@ Room10 = Room([1, 0], "This room has a shining light blub hanging from a rope. T
 
 #Funcs:
 def Fan_Blows_Door00():
-    Fan.Use[0] = "You flip the on switch but nothing happens, the fan broke."
+    Fan00.Use[0] = "You flip the on switch but nothing happens, the fan broke."
     Room01 = Room([0, 1], "This is a very bright room, it has a table and there is a key on the table. There is a door to the south.")
     Room00.Look = "It is a dark room. There is a fan, a table, a flower pot. There is a door to the north and to the east."
+    Table01 = Object("Table", "It's a table.", False, False, False, False, Type="table")
+    Key01 = Object("Key", "A golden key.", "You take the key.", "You put the key down.", ["You use the key. The door opens.", ''], False, On_Use=EndGame)
+    Room01.Items.extend([Table01, Key01])
 
 def Pot_Take00():
     Note00 = Object("Note", "It's an old, dirty note.", "You put the note in your pocket.", "You put the note down.", False, False, Text="Use the fan!", Type="note")
@@ -75,9 +78,7 @@ Room00.Items.extend([Table00, Fan00, Flower_Pot00])
 Light_Bulb10 = Object("Light Bulb", "Its a light bulb, it's on.", False, False, ["The light turns on.", "The light turns off."], True, Type="light")
 Table10 = Object("Table", "It's another table, just like the one in the room to the west.", False, False, False, False, Type="table")
 Note10 = Object("Note", "It's a note.", "You put the note in your pocket.", "You put the note down.", False, False, Text="Get the key and use it!", Type="note")
-
-Table01 = Object("Table", "It's a table.", False, False, False, False, Type="table")
-Key01 = Object("Key", "A golden key.", "You take the key.", "You put the key down.", ["You use the key. The door opens.", ''], False, On_Use=EndGame)
+Room10.Items.extend([Light_Bulb10, Table10, Note10])
 
 #Custom Commands:
 def Read(Object):

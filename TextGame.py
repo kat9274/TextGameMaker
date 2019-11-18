@@ -72,8 +72,8 @@ def Use(Object):
     if Object in FindRoom(Player.Pos).Items:
         print(Object.Use[int(Object.On)])
         Object.On = not Object.On
-        if Object.On_Use.__class__.__name__ != "nonetype":
-            if Object.Args_Use.__class__.__name__ != "nonetype":
+        if Object.On_Use.__class__.__name__.lower() == "function":
+            if Object.Args_Use.__class__.__name__.lower() != "nonetype":
                 Object.On_Use(Object.Args_Use)
             else:
                 Object.On_Use()
