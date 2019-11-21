@@ -1,108 +1,56 @@
-class Player:
-    Pos = [0, 0]
-    Objects = []
-
 class Object:
-    def __init__(self, ItemList, *args, **kwargs):
-        self.ItemList = ItemList
+    def __init__(self, Room, Name, *args, **kwargs):
+        ############## = ##########(###########, [Look, [GetO, GetI], Take, Leave])
+        self.Text_List = kwargs.get("Text_List", [None, [None, None], None, None])
+        self.Func_List = kwargs.get("Func_List", [None, [None, None], None, None])
+        self.Args_List = kwargs.get("Args_List", [None, [None, None], None, None])
 
-        self.Look = kwargs.get("Look", None)
-
-        self.Custom_Func_List = kwargs.get("Custom_Func_List", [None, None, None, None])
-        self.Custom_Args_List = kwargs.get("Custom_Args_List", [None, None, None, None])
-
-        Object_List.append(self)
-
+        Room.Item_Table[Name] = self
 
 class Room:
-    def __init__(self, Pos, Look):
+    def __init__(self, Pos, Look, *args, **kwargs):
         self.Pos = Pos
         self.Look = Look
-        self.Objects = []
-        self.Object_Table = {}
+        self.Item_Table = kwargs.get("Item_Table", {})
 
-def FindRoom(Pos):
-    i = 0
-    while i < len(RoomList):
-        if RoomList[i].Pos == Pos:
-            return RoomList[i]
-        else:
-            i = i + 1
+class Player:
+    def __init__(self, *args, **kwargs):
+        self.Pos = kwargs.get("Pos", [0, 0])
+        self.Item_Table = kwargs.get("Item_Table", {})
 
-def Parse():
-    Input = str(input("Input_Prompt")).lower().split()
+#Commands i need to make possible:
+#Look east
+#Look (AT ROOM)
+
+def Parse(Room, Command_Table, All_Objects, *args, **kwargs):
+
+    #Command_Table needs to be customizable to add new ones
+    #All_Objects Rename to something that implies names of objects
+
+    Input = input(kwargs.get("Input_Prompt", ">>> ")).lower().split()
 
     Start = None
     i = 0
     while i < len(Input):
-        if Input[i] in Commands:
+        if Input[i] in Command_Table:
             Start = i
             break
-        else:
-            i = i + 1
+        i = i + 1
 
-    try:
-        if str(type(Start).__class__.__name__).lower() == "nonetype":
-            print("NO_COMMAND")
+    if Start.__class__.__name__ == "NoneType":
+        print(kwargs.get("No_Command", "What do you want to do?"))
 
-        elif Input[Start] in Exit_Commands:
-            exit()
+    elif Input[Start] in ["stop", "end", "exit", "done"]:
+        print(kwargs.get("Exit_Text", ""))
+        exit()
 
-        Offset = 0
-        while Input[(Start + i)] not in Object_List.extend(Direction_List): #Find the object or direction
-            Offset = Offset + 1
-            pass
+    Offset = 0
+    while Input[(Start + Offset)] not in All_Objects.extend(["north", "south", "east", "west"]):
+        Offset = Offset + 1
 
-        if Input[(Start + Offset)] not in Direction_List: #If the command isn't go:
-            if Input[(Start + Offset)] in FindRoom(Player.Pos): #If the object is in the same room as the player:
-                Command(FindRoom(Player.Pos).Object_Table[Input[(Start + Offset)]], Input[Start].lower())
-            else:
-                print("NOT_HERE")
-
-        else:
-            Command_Table[Input[Start]](Direction_Table[Input[(Start + Offset)]])
-
-    except Exception as e:
-        raise
-
-def Command(Object, Command):
-    Table = {"look": 0, "use": 1, "take": 2, "leave": 3}
-    List = [Object.Look, Object.Use, Object.Take, Object.Leave]
-    print(List[Table[Command]])
-    if Command == "take":
-        print(Object.Take)
-        Player.Objects.append(Object)
-        FindRoom(Player.Pos).Objects.pop(FindRoom(Player.Pos).Objects.index(Object))
-    elif Command == "leave":
-        Player.Objects.pop(Player.Objects.index(Object))
-        FindRoom(Player.Pos).Objects.append(Object)
-    if Object.Custom_Func_List[Table[Command]].__class__.__name__.lower() != "nonetype":
-        if Object.Custom_Args_List[Table[Command]].__class__.__name__.lower() != "nonetype":
-            Object.Custom_Func_List[Table[Command]](Object.Custom_Args_List[Table[Command]])
-        else:
-            Object.Custom_Func_List[Table[Command]]()
-
-def Where(Object):
-    if type(Object).__name__ == "Player": #If the object is the player print their position
-        print(f"{Object.Pos[0]}, {Object.Pos[1]}")
-        return Object.Pos
-    else: #If its not then get the object pos
-        print(f"{RoomList.Objects.index(Object).Pos[0]}, {RoomList.Objects.index(Object).Pos[1]}")
-        return RoomList.Objects.index(Object).Pos
-
-def Go(Direction):
-    Direction_Table = {"west": [0, -1], "east": [0, 1], "south": [1, -1], "north": [1, 1]}
-    Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] + Direction_Table[Direction][1]
-    if str(type(FindRoom(Player.Pos)).__name__) == "Room":
-        print(FindRoom(Player.Pos).Look)
+    if Room.Object_Table.get(Input[(Start + Offset)], None).__class__.__name__ != "NoneType":
+        Command_Table[Input[Start]](Room.Object_Table.get(Input[(Start + Offset)], None))
+    elif Input[(Start + Offset)] in ["north", "south", "east", "west"]:
+        Command_Table[Input[Start]](Input[(Start + Offset)])
     else:
-        print("You cant go there!")
-        Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] - Direction_Table[Direction][1]
-
-Commands = ["go", "look", "use", "take", "leave", "where"]
-Exit_Commands = ["stop", "end", "exit", "done"]
-
-Object_List = []
-Direction_List = ["north", "south", "east", "west"]
-
-Commands = Commands.extend(Exit_Commands)
+        print(kwargs.get("No_Args", "What do you want to do?"))
