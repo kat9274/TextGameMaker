@@ -1,12 +1,13 @@
 class Object:
     def __init__(self, Room, Name, *args, **kwargs):
-        ############## = ##########(###########, [Look, [GetO, GetI], Take, Leave])
+        ############## = ##########(###########, [Look, [On, Off]###, Take, Leave])
         self.Text_List = kwargs.get("Text_List", [None, [None, None], None, None])
         self.Func_List = kwargs.get("Func_List", [None, [None, None], None, None])
         self.Args_List = kwargs.get("Args_List", [None, [None, None], None, None])
 
+        self.On = kwargs.get("On", False)
+
         Room.Item_Table[Name.lower()] = self
-        All_Names.append(Name.lower())
 
 class Room:
     def __init__(self, Pos, Look, *args, **kwargs):
@@ -14,62 +15,100 @@ class Room:
         self.Look = Look
         self.Item_Table = kwargs.get("Item_Table", {})
 
+        RoomList.append(self)
+
 class Player:
     def __init__(self, *args, **kwargs):
         self.Pos = kwargs.get("Pos", [0, 0])
         self.Item_Table = kwargs.get("Item_Table", {})
+Player = Player()
 
-#Commands i need to make possible:
-#Look east
-#Look (AT ROOM)
+def Parse(*args, **kwargs):
+    In = input(kwargs.get("Input_Prompt", ">>> ")).lower().split()
+    Room = FindRoom()
 
-def Parse(Room, Command_Table, *args, **kwargs):
-
-    #Command_Table needs to be customizable to add new ones #Just do that in the input to the parse func (def Parse(HERE))
-
-    Input = input(kwargs.get("Input_Prompt", ">>> ")).lower().split() #Get input and split it up
-
-    Start = None
+    print(Room)
     i = 0
-    while i < len(Input): #Find Command and where it is in the list
-        if Input[i] in Command_Table:
+    while i in range(len(In)):
+        if In[i] in list(Room.Item_Table.keys()) + ["north", "south", "east", "west"]:
+            Offset = i
+        elif In[i] in list(Command_Table.keys()):
             Start = i
-            break
         i = i + 1
 
-    if Start.__class__.__name__ == "NoneType": #If there is no command
-        print(kwargs.get("No_Command", "What do you want to do?")) #Print No_Command
-
-    elif Input[Start] in ["stop", "end", "exit", "done"]: #If the command is an exit command
-        print(kwargs.get("Exit_Text", "")) #Print Exit_Text
-        exit() #Exit
-
-    Offset = 0
-    while Input[(Start + Offset)] not in All_Names.extend(["north", "south", "east", "west"]): #Find Offset to Start that leads to object or direction
-        Offset = Offset + 1
-
-    if Room.Object_Table.get(Input[(Start + Offset)], None).__class__.__name__ != "NoneType": #If the object exists
-        Command_Table[Input[Start]](Room.Object_Table.get(Input[(Start + Offset)], None)) #Run the command with the object
-
-    elif Input[(Start + Offset)] in ["north", "south", "east", "west"]: #If its a direction
-        Command_Table[Input[Start]](Input[(Start + Offset)]) #Run the command with the direction
-
-    else: #If it's not either of those
-        print(kwargs.get("No_Args", "What do you want to do?")) #Print No_Args
-
-a = Room([0, 0], "", Item_Table={"Cat": 1, "Dog": 2, "fan": 3, "a nother cat": 8574, "mom telling me to trim my nails": 4, "light": 5, "Something": 6})
-
-def Dynamic(Room):
-    List = list(Room.Item_Table.keys())
-    Temp = []
-    i = 0
-    while i <= (len(List) - 2):
-        if i == 0:
-            Temp.append(f"There is a {List[i]}")
+    try:
+        if In[Start] in ["look", "use", "take", "leave"]:
+            try:
+                Command_Table[In[Start]](Room.Item_Table[(Start + Offset)], Command_Table[In[Start]], No_Text=kwargs.get("No_Text", ""))
+            except UnboundLocalError:
+                Command_Table[In[Start]](Room, "room")
+        elif In[Start] == "exit":
+            print(kwargs.get("Exit_Text", ""))
+            exit()
         else:
-            Temp.append(f", a {List[i]}")
-        i = i + 1
-    Temp.append(f", and a {List[i]} here.")
-    return ''.join(Temp)
+            Command_Table[In[Start]](In[(Start + Offset)] if In[(Start + Offset)] in ["north", "south", "east", "west"] else Room.Item_Table[(Start + Offset)])
+    except Exception as e:
+        if e.__class__.__name__ == "UnboundLocalError":
+            print(kwargs.get("No_Command", "What do you want to do?"))
+            pass
 
-All_Names = []
+def Commands(Object, Command, *args, **kwargs):
+    Num = {"look": 0, "use": 1, "take": 2, "leave": 3, "room": 4}[Command]
+    if Num == 2:
+        Player.Item_Table[Object.Name] = Object
+        Room.Item_Table.pop(Object.Name)
+    elif Num == 3:
+        Room.Item_Table[Object.Name] = Object
+        Player.Item_Table.pop(Object.Name)
+    if Num == 4:
+        DynamicText(FindRoom())
+        print(Object.Dynamic)
+    else:
+        if Num == 1:
+            print(Object.Text_List[Num][int(Object.On)] if Object.Text_List[Num][int(Object.On)] != None else kwargs.get("No_Text"))
+            if Object.Func_List[Num][int(Object.On)] != None and Object.Args_List[Num][int(Object.On)] != None:
+                Object.Func_List[Num][int(Object.On)]()
+            elif Object.Func_List[Num][int(Object.On)] != None:
+                Object.Func_List[Num][int(Object.On)](Object.Args_List[Num][int(Object.On)])
+        else:
+            print(Object.Text_List[Num] if Object.Text_List[Num] != None else kwargs.get("No_Text"))
+            if Object.Func_List[Num] != None and Object.Args_List[Num] != None:
+                Object.Func_List[Num]()
+            elif Object.Func_List[Num] != None:
+                Object.Func_List[Num](Object.Args_List[Num])
+
+def Go(Direction, *args, **kwargs):
+    Direction_Table = {"west": [0, -1], "east": [0, 1], "south": [1, -1], "north": [1, 1]}
+    Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] + Direction_Table[Direction][1]
+    if str(type(FindRoom()).__name__) == "Room":
+        print(FindRoom().Look)
+    else:
+        print(kwargs.get("No_Room", "You can't go there."))
+        Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] - Direction_Table[Direction][1]
+
+def FindRoom():
+    for i in range(len(RoomList)):
+        if RoomList[i].Pos == Player.Pos:
+            return RoomList[i]
+
+def DynamicText(Room):
+    Num = 0
+    i = 0
+    DynamicTextList = []
+    Pre = [" There is ", "", "and "]
+    Ap = ", "
+    Item_List = list(Room.Item_Table.keys())
+    while i < len(Item_List):
+        DynamicTextList.append(f"{Pre[Num]}a {Item_List[i]}{Ap}")
+        if Item_List[i] != Item_List[-2]:
+            Num = 1
+        else:
+            Ap = "."
+            Num = 2
+        i = i + 1
+    Room.Dynamic = Room.Look + ''.join(DynamicTextList)
+
+Command_Table = {"go": Go, "look": Commands, "use": Commands, "take": Commands, "leave": Commands, "exit": 0}
+RoomList = []
+
+print("TextGameMaker by Kat9274")
