@@ -11,8 +11,8 @@ def Fan1On():
 
 Room00 = Room([0, 0], "It is a pretty bright room.")
 
-Fan1 = Object(Room00, "Fan", Text_List=["It's a fan.", ["You turn the fan on.", "You turn the fan off."], None, None], Func_List=[None, [Fan1On, None], None, None])
+Fan1 = Object(Room00, "Fan", Text_List=["It's a fan.", ["You turn the fan on.", "You turn the fan off."], None, None], Func_List=[None, [Win, None], None, None])
 
 while True:
     Parse(Input_Prompt=">>> ", Exit_Text="Bye.", No_Command="What?", No_Text="You can't do that!")
-#DOESNT WORK FIX LATER
+#NO CUSTOM COMMANDS FIX LATER

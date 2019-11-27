@@ -1,3 +1,5 @@
+import random
+
 class Object:
     def __init__(self, Room, Name, *args, **kwargs):
         ############## = ##########(###########, [Look, [On, Off]###, Take, Leave])
@@ -27,7 +29,6 @@ def Parse(*args, **kwargs):
     In = input(kwargs.get("Input_Prompt", ">>> ")).lower().split()
     Room = FindRoom()
 
-    print(Room)
     i = 0
     while i in range(len(In)):
         if In[i] in list(Room.Item_Table.keys()) + ["north", "south", "east", "west"]:
@@ -39,9 +40,12 @@ def Parse(*args, **kwargs):
     try:
         if In[Start] in ["look", "use", "take", "leave"]:
             try:
-                Command_Table[In[Start]](Room.Item_Table[(Start + Offset)], Command_Table[In[Start]], No_Text=kwargs.get("No_Text", ""))
+                Command_Table[In[Start]](Room.Item_Table[In[(Start + Offset)]], In[Start], No_Text=kwargs.get("No_Text", ""))
             except UnboundLocalError:
-                Command_Table[In[Start]](Room, "room")
+                if In[Start] == "look":
+                    Command_Table[In[Start]](Room, "room")
+                else:
+                    pass
         elif In[Start] == "exit":
             print(kwargs.get("Exit_Text", ""))
             exit()
@@ -70,6 +74,7 @@ def Commands(Object, Command, *args, **kwargs):
                 Object.Func_List[Num][int(Object.On)]()
             elif Object.Func_List[Num][int(Object.On)] != None:
                 Object.Func_List[Num][int(Object.On)](Object.Args_List[Num][int(Object.On)])
+            Object.On = not Object.On
         else:
             print(Object.Text_List[Num] if Object.Text_List[Num] != None else kwargs.get("No_Text"))
             if Object.Func_List[Num] != None and Object.Args_List[Num] != None:
@@ -100,11 +105,12 @@ def DynamicText(Room):
     Item_List = list(Room.Item_Table.keys())
     while i < len(Item_List):
         DynamicTextList.append(f"{Pre[Num]}a {Item_List[i]}{Ap}")
-        if Item_List[i] != Item_List[-2]:
-            Num = 1
-        else:
-            Ap = "."
-            Num = 2
+        if len(Item_List) > 3:
+            if Item_List[-2] != Item_List[i]:
+                Num = 1
+            else:
+                Ap = "."
+                Num = 2
         i = i + 1
     Room.Dynamic = Room.Look + ''.join(DynamicTextList)
 
