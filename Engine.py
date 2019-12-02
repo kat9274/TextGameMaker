@@ -77,6 +77,7 @@ def Commands(Object, Command, *args, **kwargs):
             Object.On = not Object.On
         else:
             print(Object.Text_List[Num] if Object.Text_List[Num] != None else kwargs.get("No_Text"))
+            print(Object.Func_List[Num]()) #UNDER HERE #ITS THE FUNCS NOT RUNNING
             if Object.Func_List[Num] != None and Object.Args_List[Num] != None:
                 Object.Func_List[Num]()
             elif Object.Func_List[Num] != None:
