@@ -71,12 +71,9 @@ def Commands(Object, Command, *args, **kwargs):
         if Num == 1:
             print(Object.Text_List[Num][int(Object.On)] if Object.Text_List[Num][int(Object.On)] != None else kwargs.get("No_Text"))
             if Object.Func_List[Num][int(Object.On)] != None and Object.Args_List[Num][int(Object.On)] != None:
-                print(1)
-                Object.Func_List[Num][int(Object.On)]()
-            elif Object.Func_List[Num][int(Object.On)] != None:
-                print(1)
                 Object.Func_List[Num][int(Object.On)](Object.Args_List[Num][int(Object.On)])
-            print(1)
+            elif Object.Func_List[Num][int(Object.On)] != None:
+                Object.Func_List[Num][int(Object.On)]()
             Object.On = not Object.On
         else:
             print(Object.Text_List[Num] if Object.Text_List[Num] != None else kwargs.get("No_Text"))
@@ -85,7 +82,6 @@ def Commands(Object, Command, *args, **kwargs):
                 Object.Func_List[Num]()
             elif Object.Func_List[Num] != None:
                 Object.Func_List[Num](Object.Args_List[Num])
-            print(2)
 
 def Go(Direction, *args, **kwargs):
     Direction_Table = {"west": [0, -1], "east": [0, 1], "south": [1, -1], "north": [1, 1]}
