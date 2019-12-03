@@ -69,15 +69,14 @@ def Commands(Object, Command, *args, **kwargs):
         print(Object.Dynamic)
     else:
         if Num == 1:
-            print(Object.Text_List[Num][int(Object.On)] if Object.Text_List[Num][int(Object.On)] != None else kwargs.get("No_Text"))
+            print(Object.Text_List[Num][int(Object.On)] if Object.Text_List[Num][int(Object.On)] != None else kwargs.get("No_Text", "You can't do that!"))
             if Object.Func_List[Num][int(Object.On)] != None and Object.Args_List[Num][int(Object.On)] != None:
                 Object.Func_List[Num][int(Object.On)](Object.Args_List[Num][int(Object.On)])
             elif Object.Func_List[Num][int(Object.On)] != None:
                 Object.Func_List[Num][int(Object.On)]()
             Object.On = not Object.On
         else:
-            print(Object.Text_List[Num] if Object.Text_List[Num] != None else kwargs.get("No_Text"))
-            print(Object.Func_List[Num]()) #UNDER HERE #ITS THE FUNCS NOT RUNNING
+            print(Object.Text_List[Num] if Object.Text_List[Num] != None else kwargs.get("No_Text", "You can't do that!"))
             if Object.Func_List[Num] != None and Object.Args_List[Num] != None:
                 Object.Func_List[Num]()
             elif Object.Func_List[Num] != None:
@@ -87,7 +86,8 @@ def Go(Direction, *args, **kwargs):
     Direction_Table = {"west": [0, -1], "east": [0, 1], "south": [1, -1], "north": [1, 1]}
     Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] + Direction_Table[Direction][1]
     if str(type(FindRoom()).__name__) == "Room":
-        print(FindRoom().Look)
+        DynamicText(FindRoom())
+        print(FindRoom().Dynamic)
     else:
         print(kwargs.get("No_Room", "You can't go there."))
         Player.Pos[Direction_Table[Direction][0]] = Player.Pos[Direction_Table[Direction][0]] - Direction_Table[Direction][1]
