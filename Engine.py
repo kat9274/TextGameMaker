@@ -119,7 +119,7 @@ def FindRoom(**kwargs):
             return RoomList[i]
 
 def Help(*args):
-    print(f'Commands:\n  Go: type "go [direction]" to go in that direction. The directions are: north, south, east, west, up, and down.\n  Look: Type "look [object]" to see a short discription of that object. You can also just type "look" to see a discription of the room, a list of items, and all the rooms you can go to.\n  Use: Type "use [object]" to use an object. The thing it does will vary by object.\n  Take: Type "take [object]" to add the item to your inventory.\n  Leave: Type "leave [object]" to put the item down and remove it from your inventory.\n  Exit: Type: "exit" and the game will exit and save your progress.\n  Help: Type "help" to get to this again.\n  Custom Commands: Some games might have various custom commands that cannot be listed here.')
+    print(f'Commands:\n  Go: type "go [direction]" to go in that direction. The directions are: north, south, east, west, up, and down.\n  Look: Type "look [object]" to see a short discription of that object. You can also just type "look" to see a discription of the room, a list of items, and all the rooms you can go to.\n  Use: Type "use [object]" to use an object. The thing it does will vary by object.\n  Take: Type "take [object]" to add the item to your inventory.\n  Leave: Type "leave [object]" to put the item down and remove it from your inventory.\n  Exit: Type: "exit" and the game will exit.\n  Help: Type "help" to get to this again.\n  Custom Commands: Some games might have various custom commands that cannot be listed here.')
 
 Command_Table = {"go": Go, "look": Commands, "use": Commands, "take": Commands, "leave": Commands, "exit": exit, "help": Help}
 RoomList = []
