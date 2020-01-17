@@ -16,13 +16,22 @@ def TrashL_Can():
         print("You throw the trash on the ground")
 
 #Short term:
-#Make items have ids that you use to call them instead, put saves on hold its needed.
-#Make saves
+
+#IDS:
+
+#ROOM IDS COULD BE THEIR Pos
+#ITEM IDS COULD BE A NUMBER THAT IS INCREMENTED EVERY TIME #NOT GOING TO WORK AS THEY MIGHT BE MADE IN DIFFERTENT ORDERS
+
+#Make Ids for everything and make a large id list.
+#The Ids need to not be tied to a position but be unique
+#Make a function that finds the object from the id.
+#Implement it
+#Fix Parse
 
 #Long term:
+#Make saves
 #Write documentation
 #Make characters you can talk to and shops you can buy from
-#Make it to where you can have multiple objects with same name #maybe an id or somthing
 #SpellCheck
 RoomC = Room([0, 0, 0], "It is a pretty bright room.")
 RoomCU = Room([0, 0, 1], "It is the roof of the house you were just in. There is no other way but down. To the west there is a garden with a fountain, to the east there is a fenced field, and to the north and south there is a forest that surrounds everything in sight.")
@@ -41,5 +50,7 @@ TrashCanCU = Object(RoomCU, "TrashCan", Text_List=["It's a trash can with nothin
 
 FountainR = Object(RoomR, "Fountain", Text_List=["It's a fountain with a lever on the side.", [None, None], None, None])
 LeverR = Object(RoomR, "Lever", Text_List=["It's a lever attached to the fountain.", [None, None], None, None]) #Func_List=[None, [LeverR_Func_On, LeverR_Func_Off], None, None])
+
+
 
 print(f"This is a very short example game.\n{FindRoom().DynamicText()}")
