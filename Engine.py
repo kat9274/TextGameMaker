@@ -8,8 +8,6 @@ class Object:
         self.Args_List = kwargs.get("Args_List", [(), [(), ()], (), ()])
 
         self.On = kwargs.get("On", False)
-        self.No_Text = kwargs.get("No_Text", "You can't do that!")
-        self.End = kwargs.get("End", "\n")
 
         Room.Item_Table[self.Name] = self
 
@@ -58,6 +56,12 @@ class Room:
 
         return self.Look + ''.join(ItemTextList) + ''.join(RoomTextList) + ''.join(PlayerItemList)
 
+    def Save(self):
+        #Save objects here
+        #For commands just have a huge lookup table
+        #Use eval("Str")
+        return f"{self.Pos[0]},{self.Pos[1]},{self.Pos[2]}:{self.Look}:{self.Go_Command}:{self.Item_Table}"
+
 class Player:
     def __init__(self, **kwargs):
         self.Pos = kwargs.get("Pos", [0, 0, 0])
@@ -95,7 +99,7 @@ def Commands(Object, Command, **kwargs):
     Text = Object.Text_List[Num][int(Object.On)] if Num == 1 else Object.Text_List[Num]
     print(Text if Text != None else Object.No_Text, end=Object.End)
     if Func != None:
-        Func()
+        Func(Args)
         Object.On = not Object.On if Num == 1 else Object.On
 
 def Go(Direction, **kwargs):
@@ -117,6 +121,18 @@ def FindRoom(**kwargs):
     for i in range(len(RoomList)): #Go through all the rooms
         if RoomList[i].Pos == kwargs.get("Pos", Player.Pos): #If the rooms pos is the same as the inputed pos then return the room
             return RoomList[i]
+
+def Exit(Text, **kwargs):
+    for i in range(len(RoomList)):
+        RoomData.append(RoomList[i].Save())
+        #needs to get the objects from the last list so like:
+        #Objects = eval(RoomData[i].split(":")[-1]
+    #Write to file here
+
+#def Start(**kwargs):
+#for line in file:
+#Data = file[line].lower().split(":")
+        
 
 def Help(*args):
     print(f'Commands:\n  Go: type "go [direction]" to go in that direction. The directions are: north, south, east, west, up, and down.\n  Look: Type "look [object]" to see a short discription of that object. You can also just type "look" to see a discription of the room, a list of items, and all the rooms you can go to.\n  Use: Type "use [object]" to use an object. The thing it does will vary by object.\n  Take: Type "take [object]" to add the item to your inventory.\n  Leave: Type "leave [object]" to put the item down and remove it from your inventory.\n  Exit: Type: "exit" and the game will exit.\n  Help: Type "help" to get to this again.\n  Custom Commands: Some games might have various custom commands that cannot be listed here.')
