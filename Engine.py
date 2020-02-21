@@ -15,7 +15,7 @@ class Room:
     def __init__(self, Pos, Look, **kwargs):
         self.Pos = Pos
         self.Look = Look
-        self.Item_Table = {}
+        self.Item_Table = kwargs.get("Item_Table", {})
         self.Go_Command = kwargs.get("Go_Command", None)
 
         RoomList.append(self)
@@ -56,11 +56,12 @@ class Room:
 
         return self.Look + ''.join(ItemTextList) + ''.join(RoomTextList) + ''.join(PlayerItemList)
 
-    def Save(self):
-        #Save objects here
-        #For commands just have a huge lookup table
-        #Use eval("Str")
-        return f"{self.Pos[0]},{self.Pos[1]},{self.Pos[2]}:{self.Look}:{self.Go_Command}:{self.Item_Table}"
+    def SaveItems(self):
+        Items = []
+        for i in range(len(list(self.Item_Table.keys()))):
+            Object = self.Item_Table[list(self.Item_Table.keys())[i]]
+            Items.append(f"{Object.Name}-{Object.Text_List}-{Object.Func_List}-{Object.Args_List}-{Object.On}")
+        return Items
 
 class Player:
     def __init__(self, **kwargs):
@@ -78,7 +79,7 @@ def Parse(**kwargs):
         elif In[i] in list(Room.Item_Table.keys()) + list(Player.Item_Table.keys()) + ["north", "south", "east", "west", "up", "down"]: #Find the object/direction
             Offset = i
 
-    #DEFINE OBJECT HERE
+    Object = Room.Item_Table[In[Offset]]
 
     if In[Start] in ["go", "exit"]: #If the command is go or exit
         Command_Table[In[Start]](In[(Start + Offset)] if In[Start] == "go" else kwargs.get("Exit_Text", "Bye.")) #Run the command
@@ -123,19 +124,31 @@ def FindRoom(**kwargs):
             return RoomList[i]
 
 def Exit(Text, **kwargs):
+    file = open("Save.dat", "a+")
     for i in range(len(RoomList)):
-        RoomData.append(RoomList[i].Save())
-        #needs to get the objects from the last list so like:
-        #Objects = eval(RoomData[i].split(":")[-1]
-    #Write to file here
+        file.write(f"{RoomList[i].Pos}:{RoomList[i].Look}:{RoomList[i].Go_Command}:{RoomList[i].SaveItems()}\n")
 
-#def Start(**kwargs):
-#for line in file:
-#Data = file[line].lower().split(":")
-        
+    exit(Text)
+
+def Start(**kwargs):
+    file = open("Save.dat", "r+")
+    for i in file:
+        Room = FindRoom(eval(file[i].split(":")[0]))
+        Room.Look = file[i].split(":")[1]
+        # Set go command here. needs a little bit of work because you cant just use eval() to get a function.
+        for i2 in range(len(list(Room.Item_Table.keys()))):
+            ObjectList = eval(line[i].split(":")[3])
+            Object = Room.Item_Table[ObjectList[i2].split("-")[0]]
+            Object.Text_List = eval(ObjectList[i2].split("-")[1])
+            Object.Func_List = eval(ObjectList[i2].split("-")[2])
+            Object.Args_List = eval(ObjectList[i2].split("-")[3])
+            Object.On = eval(ObjectList[i2].split("-")[4])
+
+    while True:
+        Parse(Input_Prompt=kwargs.get("Input_Prompt", ">>> "), Exit_Text=kwargs.get("Exit_Text", "Bye."), No_Parse=kwargs.get("No_Parse", "What?"))
 
 def Help(*args):
     print(f'Commands:\n  Go: type "go [direction]" to go in that direction. The directions are: north, south, east, west, up, and down.\n  Look: Type "look [object]" to see a short discription of that object. You can also just type "look" to see a discription of the room, a list of items, and all the rooms you can go to.\n  Use: Type "use [object]" to use an object. The thing it does will vary by object.\n  Take: Type "take [object]" to add the item to your inventory.\n  Leave: Type "leave [object]" to put the item down and remove it from your inventory.\n  Exit: Type: "exit" and the game will exit.\n  Help: Type "help" to get to this again.\n  Custom Commands: Some games might have various custom commands that cannot be listed here.')
 
-Command_Table = {"go": Go, "look": Commands, "use": Commands, "take": Commands, "leave": Commands, "exit": exit, "help": Help}
+Command_Table = {"go": Go, "look": Commands, "use": Commands, "take": Commands, "leave": Commands, "exit": Exit, "help": Help}
 RoomList = []

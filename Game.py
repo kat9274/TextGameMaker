@@ -16,17 +16,12 @@ def TrashL_Can():
         print("You throw the trash on the ground")
 
 #Short term:
-
-#IDS:
-
-#ROOM IDS COULD BE THEIR Pos
-#ITEM IDS COULD BE A NUMBER THAT IS INCREMENTED EVERY TIME #NOT GOING TO WORK AS THEY MIGHT BE MADE IN DIFFERTENT ORDERS
-
-#Make Ids for everything and make a large id list.
-#The Ids need to not be tied to a position but be unique
-#Make a function that finds the object from the id.
-#Implement it
+#Only ever use roomlist no rooms specific names
 #Fix Parse
+#Make functions to add fucntions to objects or rooms
+#make functions to add args included in the one to add functions
+#do some other stuff
+
 
 #Long term:
 #Make saves
@@ -51,6 +46,5 @@ TrashCanCU = Object(RoomCU, "TrashCan", Text_List=["It's a trash can with nothin
 FountainR = Object(RoomR, "Fountain", Text_List=["It's a fountain with a lever on the side.", [None, None], None, None])
 LeverR = Object(RoomR, "Lever", Text_List=["It's a lever attached to the fountain.", [None, None], None, None]) #Func_List=[None, [LeverR_Func_On, LeverR_Func_Off], None, None])
 
-
-
 print(f"This is a very short example game.\n{FindRoom().DynamicText()}")
+Start()
