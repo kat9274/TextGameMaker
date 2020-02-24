@@ -1,15 +1,42 @@
+#NO CUSTOM FUNCTIONS
+#NO CUSTOM FUNCTIONS
+#NO CUSTOM FUNCTIONS
+#NO CUSTOM FUNCITONS
+#NO CUSTOM FUCNTIONS
+#NO CUSTOM FUCNTIONS
+#NO CUSTOM FUNCITONS
 class Object:
-    def __init__(self, Room, Name, **kwargs):
+    def __init__(self, Name, Room, **kwargs):
         self.Name = Name.lower()
-
-        ############## = ##########(###########, [Look, [On, Off]###, Take, Leave])
-        self.Text_List = kwargs.get("Text_List", [None, [None, None], None, None])
-        self.Func_List = kwargs.get("Func_List", [None, [None, None], None, None])
-        self.Args_List = kwargs.get("Args_List", [(), [(), ()], (), ()])
-
         self.On = kwargs.get("On", False)
+        #                               Look  Use On/Off
+        self.Text = kwargs.get("Text", [None, [None, None]])
 
-        Room.Item_Table[self.Name] = self
+        room.Items[self.Name] = self
+
+class Room:
+    def __init__(self, pos, look, **kwargs):
+        self.Pos = Pos
+        self.Look = Look
+        self.Items = kwargs.get("Items", {})
+
+        Rooms[str(Pos)] = self
+
+    def Text(self):
+        Objects = list(self.Items.values()) #.values is a list of the values.
+        Text = [" There is" if len(Objects) != 1 else " There is nothing but"]
+        for i in range(len(Objects)):
+            Text.append(f"{' and ' if len(Objects) != 1 else ' '}a {Objects[i].Name}{'.' if i == (len(Objects) - 1) else ','}")
+
+        #Directions =
+        #DO THIS
+        #Text.append(" There is")
+        #for i in range(len(Directions)):
+        #    Text.append(f"{' and ' if len(Directions) != 1 else ' '}a {Directions[i]}{'.' if i == (len(Directions) - 1) else ','}")
+
+class Player:
+    Pos = [0, 0, 0]
+    Item_Table = {}
 
 class Room:
     def __init__(self, Pos, Look, **kwargs):
